@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useContext, useState} from 'react';
 import { Link } from 'react-router-dom';
 import { CiSearch } from 'react-icons/ci';
+import { UserContext } from '../context/UserContext';
 
 function Navbar() {
-  const user = false; // Placeholder for user authentication logic
+  const [menu,setMenu] =useState(false)
+
+  const showMenu=()=>{
+    setMenu(!menu)
+  }
+
+  const {user} = useContext(UserContext); // Placeholder for user authentication logic
 
   return (
     <div className="flex items-center justify-between px-4 md:px-6 lg:px-12 py-4">
       <h1 className="text-xl font-extrabold">
-        <Link to="/">TheBloger</Link>
+        <Link to="https://thebloger.netlify.app/">TheBloger</Link>
       </h1>
       <div className="hidden md:flex items-center space-x-2 md:space-x-4">
         <CiSearch className="text-gray-600" />

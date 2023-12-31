@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const post = require("../Models/post");
-
+const verifyToken= require("../verifyToken")
 //Create
-router.post("/create",async(req,res)=>{
+router.post("/create",verifyToken,async(req,res)=>{
     try{
     const NewPost = new post(req.body)
     const savedPost=await NewPost.save()
@@ -16,7 +16,7 @@ router.post("/create",async(req,res)=>{
 
 
 //Update
-router.put("/:id", async (req, res) => {
+router.put("/:id",verifyToken, async (req, res) => {
   try {
     const updatedPost=await post.findByIdAndUpdate(req.params.id,{$set:req.body},{new:true})
     res.status(200).json(updatedPost);
@@ -26,7 +26,7 @@ router.put("/:id", async (req, res) => {
 });
 
 //Delete
-router.delete("/:id", async (req,res) => {
+router.delete("/:id",verifyToken, async (req,res) => {
   try {
     await post.findByIdAndDelete(req.params.id);
     res.status(200).json("Post have been deleted")
@@ -42,7 +42,7 @@ router.get("/", async (req, res) => {
     const serachResult = {
       title:{$regex:query.search,$option:"i"}
     }
-    const Post= await post.find()
+    const Post= await post.find(query.search?searchFilter:null)
     res.status(200).json(Post)
   } catch (err) {
     res.status(500).send(err)
